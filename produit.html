@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Détail Produit — SIPAMO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root { --font-main: 'Jost', sans-serif; --color-black: #1a1a1a; --bg-light: #f4f4f4; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: var(--font-main); color: var(--color-black); }
+
+    /* Header */
+    header { padding: 20px; position: sticky; top: 0; background: rgba(255,255,255,0.95); border-bottom: 1px solid #eee; display: flex; align-items: center; justify-content: space-between; z-index: 100;}
+    .logo { font-weight: 500; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; color: black; }
+    
+    /* Bouton Retour */
+    .btn-back {
+        background: none; border: none; cursor: pointer; font-family: inherit; font-size: 14px; 
+        text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 5px;
+    }
+    .btn-back:hover { text-decoration: underline; }
+
+    /* Layout Produit */
+    .product-container { max-width: 900px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; }
+    
+    .img-wrapper { background: var(--bg-light); height: 500px; display: flex; align-items: center; justify-content: center; }
+    .product-img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .details { padding-top: 20px; }
+    h1 { margin: 0 0 10px 0; font-weight: 400; font-size: 28px; text-transform: uppercase; }
+    .price { font-size: 20px; font-weight: 600; margin-bottom: 30px; display: block; }
+    .desc { line-height: 1.6; color: #555; margin-bottom: 40px; }
+    
+    .btn-add { width: 100%; padding: 18px; background: #000; color: #fff; border: none; text-transform: uppercase; font-weight: 500; cursor: pointer; letter-spacing: 1px; transition: opacity 0.2s; }
+    .btn-add:hover { opacity: 0.8; }
+
+    @media (max-width: 768px) {
+        .product-container { grid-template-columns: 1fr; gap: 30px; }
+        .img-wrapper { height: 350px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <button class="btn-back">← Retour</button>
+    <a href="index.html" class="logo">SIPAMO</a>
+    <div style="width:60px"></div>
+  </header>
+
+  <div class="product-container">
+    <div class="img-wrapper">
+        <img id="p-img" class="product-img" src="" alt="Produit">
+    </div>
+    <div class="details">
+        <h1 id="p-title">Chargement...</h1>
+        <span id="p-price" class="price">...</span>
+        <p id="p-desc" class="desc">
+            Ce vêtement incarne l'alliance parfaite entre tradition et modernité. 
+            Conçu avec des matériaux de haute qualité, il assure confort et élégance en toute occasion.
+        </p>
+        
+        <div style="margin-bottom: 20px;">
+            <label style="font-size:12px; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:8px;">Taille</label>
+            <select style="width:100%; padding:10px; border:1px solid #ddd; border-radius:0;">
+                <option>Sélectionner une taille</option>
+                <option>M</option>
+                <option>L</option>
+                <option>XL</option>
+            </select>
+        </div>
+
+        <button class="btn-add" onclick="alert('Ajouté au panier !')">Ajouter au panier</button>
+    </div>
+  </div>
+
+  <script>
+    // 1. On lit l'URL pour afficher les bonnes infos
+    const params = new URLSearchParams(window.location.search);
+
+    document.getElementById('p-title').innerText = params.get('titre') || "Produit Inconnu";
+    document.getElementById('p-price').innerText = (params.get('prix') || "0") + " FCFA";
+    document.getElementById('p-img').src = params.get('img') || "https://placehold.co/400x500?text=No+Image";
+    
+    // 2. Gestion intelligente du bouton Retour
+    const btnBack = document.querySelector('.btn-back');
+
+    // On récupère les infos de navigation (Catégorie et Index Sous-catégorie)
+    const navCat = params.get('navCat');
+    const navSub = params.get('navSub');
+
+    btnBack.onclick = function(e) {
+        e.preventDefault(); 
+        
+        if (navCat && navSub) {
+            // SCÉNARIO 1 : On vient du menu. 
+            // On retourne à l'index avec l'ordre de restaurer le menu
+            window.location.href = `index.html?restoreCat=${navCat}&restoreSub=${navSub}`;
+        } else {
+            // SCÉNARIO 2 : On vient d'ailleurs (lien direct, grille accueil...)
+            // Retour simple à l'accueil
+            window.location.href = 'index.html';
+        }
+    };
+  </script>
+
+</body>
+</html>
